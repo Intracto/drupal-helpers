@@ -92,13 +92,13 @@ trait EntityHelperTrait {
     $entities = [];
 
     foreach ($list as $fieldItem) {
-      $entity = $fieldItem->entity;
+      $referencedEntity = $fieldItem->entity;
 
-      if (!$entity) {
+      if (!$referencedEntity) {
         continue;
       }
 
-      $entities[] = $entity;
+      $entities[] = $referencedEntity;
     }
 
     if (!$translated) {
