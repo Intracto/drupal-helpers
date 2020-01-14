@@ -6,6 +6,8 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
+use Drupal\Core\Url;
+use Drupal\link\Plugin\Field\FieldType\LinkItem;
 
 /**
  * Trait EntityTranslationTrait.
@@ -30,11 +32,48 @@ trait EntityHelperTrait {
    *   The entity field value.
    */
   public function getEntityFieldValue(EntityInterface $entity, string $field) : ?string {
+    return $this->getEntityFieldProperty($entity, $field, 'value');
+  }
+
+  /**
+   * Returns the url for an entity link field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity for which to return a
+   * @param string $field
+   *   The link field item.
+   *
+   * @return \Drupal\Core\Url|null
+   */
+  public function getEntityLinkFieldUrl(EntityInterface $entity, string $field) : ?Url {
+    $item = $this->getFirstEntityFieldItem($entity, $field);
+
+    if (!$item instanceof LinkItem) {
+      return NULL;
+    }
+
+    return $item->getUrl();
+  }
+
+  /**
+   * Returns the first property of an entity field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   * @param string $field
+   *   The field for which to return a property.
+   * @param string $property
+   *   The property.
+   *
+   * @return mixed
+   *   The value matching that property.
+   */
+  public function getEntityFieldProperty(EntityInterface $entity, string $field, string $property) {
     if (!$firstItem = $this->getFirstEntityFieldItem($entity, $field)) {
       return NULL;
     }
 
-    if (!$value = $firstItem->value) {
+    if (!$value = $firstItem->{$property}) {
       return NULL;
     }
 
