@@ -181,6 +181,64 @@ trait EntityHelperTrait {
   }
 
   /**
+   * Returns the referenced entity label from a entity_reference field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity for which to retrieve the field value.
+   * @param string $field
+   *   The name of the field to return.
+   * @param bool $translated
+   *   Use the current entity langcode to return translated entities?
+   * @param bool $removeUntranslated
+   *   Skip a referenced entity that is not translated in the correct langcode.
+   *
+   * @return string|null
+   *   The referenced entity label.
+   */
+  public function getReferencedEntityLabel(EntityInterface $entity, string $field, bool $translated = TRUE, bool $removeUntranslated = FALSE) : ?string {
+    $entity = $this->getReferencedEntityByField($entity, $field, $translated, $removeUntranslated);
+
+    if (!$entity) {
+      return NULL;
+    }
+
+    return $entity->label();
+  }
+
+
+
+  /**
+   * Returns the referenced entities from a entity_reference field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity for which to retrieve the field value.
+   * @param string $field
+   *   The name of the field to return.
+   * @param bool $translated
+   *   Use the current entity langcode to return translated entities?
+   * @param bool $removeUntranslated
+   *   Skip a referenced entity that is not translated in the correct langcode.
+   *
+   * @return array
+   *   An array containing all entity labels.
+   */
+  public function getReferencedEntityLabels(EntityInterface $entity, string $field, bool $translated = TRUE, bool $removeUntranslated = FALSE) : array {
+    $entities = $this->getReferencedEntitiesByField($entity, $field, $translated, $removeUntranslated);
+
+    if (empty($entities)) {
+      return [];
+    }
+
+    $labels = [];
+
+    foreach ($entities as $entity) {
+      $labels[$entity->id()] = $entity->label();
+    }
+
+    return $labels;
+  }
+
+  /**
    * Checks if an entity has a field and it has data.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
