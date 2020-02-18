@@ -92,6 +92,23 @@ trait EntityHelperTrait {
    *   The entity field values.
    */
   public function getEntityFieldValues(EntityInterface $entity, string $field) : array {
+    return $this->getEntityFieldProperties($entity, $field, 'value');
+  }
+
+  /**
+   * Returns the properties of an entity field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   * @param string $field
+   *   The field for which to return a property.
+   * @param string $property
+   *   The property.
+   *
+   * @return mixed
+   *   The value matching that property.
+   */
+  public function getEntityFieldProperties(EntityInterface $entity, string $field, string $property) : array {
     if (!$list = $this->getEntityFieldList($entity, $field)) {
       return [];
     }
@@ -99,7 +116,7 @@ trait EntityHelperTrait {
     $values = [];
 
     foreach ($list as $fieldItem) {
-      if (!$value = $fieldItem->value) {
+      if (!$value = $fieldItem->{$property}) {
         continue;
       }
 
