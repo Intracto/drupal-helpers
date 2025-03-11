@@ -19,7 +19,7 @@ trait EntityTranslationTrait {
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   An entity that might contain a translation.
-   * @param string $langcode
+   * @param string|null $langcode
    *   The langcode in which to translate, leave empty to use current langcode.
    * @param bool $required
    *   If an entity is not translated, returns NULL if set to TRUE.
@@ -27,7 +27,7 @@ trait EntityTranslationTrait {
    * @return \Drupal\Core\Entity\EntityInterface|null
    *   The translated entity or null.
    */
-  public function translateEntity(EntityInterface $entity, string $langcode = NULL, bool $required = FALSE) : ?EntityInterface {
+  public function translateEntity(EntityInterface $entity, ?string $langcode = NULL, bool $required = FALSE) : ?EntityInterface {
     if ($required) {
       $returnEntity = NULL;
     }
@@ -57,7 +57,7 @@ trait EntityTranslationTrait {
    *
    * @param array $entities
    *   An array of entities.
-   * @param string $langcode
+   * @param string|null $langcode
    *   The langcode in which to translate, leave empty to use current langcode.
    * @param bool $removeUntranslated
    *   Removes entities that are not translated.
@@ -65,7 +65,7 @@ trait EntityTranslationTrait {
    * @return array
    *   An array of translated entities
    */
-  public function translateEntities(array $entities, string $langcode = NULL, bool $removeUntranslated = FALSE) : array {
+  public function translateEntities(array $entities, ?string $langcode = NULL, bool $removeUntranslated = FALSE) : array {
     // Get the langcode first so we don't have to fetch it in the loop.
     if (!$langcode) {
       $langcode = \Drupal::languageManager()
